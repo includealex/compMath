@@ -1,0 +1,122 @@
+\documentclass[a4paper,12pt]{article} 
+\usepackage[T2A]{fontenc}			
+\usepackage[utf8]{inputenc}			
+\usepackage[english,russian]{babel}	
+\usepackage{amsmath,amsfonts,amssymb,amsthm,mathrsfs,mathtools} 
+\usepackage{cancel}
+\usepackage{hhline}
+\usepackage{multirow}
+\usepackage[colorlinks, linkcolor = purple, citecolor = purple]{hyperref}
+\usepackage{upgreek}\usepackage[left=2cm,right=2cm,top=2cm,bottom=3cm,bindingoffset=0cm]{geometry}
+\usepackage{tikz}
+\usepackage{graphicx}
+\usepackage{subfig}
+\usepackage{titletoc}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{xcolor}
+\usepackage{wrapfig}
+\usepackage{todonotes}
+
+\newcommand\myworries[1]{\textcolor{red}{#1}}
+
+\title{Sem2Synopsis}
+\author{Александр Мишин, Б01-008а}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section{Комментарии по д/з}
+    Построить график абс. погрешности каждого метода:
+    $$f'(x) = \sin(x^2)'$$
+    $$f'(x) = \frac{f(x+h) - f(x)}{h}$$
+    $$h = \frac{2}{2^n}$$
+    В логарифмическом масштабе строим графики $\Delta(h)$. Идейно - должны быть графики прямых.
+    $$\Delta f'(h) = |f'_a - f'_\tau|,  n = \overline{1, n}$$
+    \\
+
+    Что касается оформления? \\
+    Питончик - notebook или collab. Ожидается от нас 
+        -ФИО, группа\\
+        -Вариант(если задание предусматривает)\\
+        -Результаты(графики)\\
+        -Код\\
+
+    Нормы в конечномерных пространствах.\\
+    
+\section{Сам семинар}
+    Мы хотим решить $Ax = f$ в большинстве случаев, где А - матрица. А как численно найти x?\\
+    Методом Гаусса, Крамора - неинтересно, потому что алг.сложность $n^3$. Может быть ошибка в самом начале, в зависимости от начальных данных. А что такое ошибка при подсчёте
+    $\Delta \overline{x}$
+    
+    Решение - вводить нормы\\
+    1)$||x||_1 = \max|x_k| \Leftrightarrow ||A||_1 = \max\limits_{i} \displaystyle\sum_{j=1}^{n} \overline{|a_{ij}|}$\\
+    2)$||x||_2 = \Sigma |x_k| \Leftrightarrow ||A||_2 = \max\limits_{j} \displaystyle\sum_{i=1}^{n}
+    \overline{|a_{ij}|}$\\
+    3)$||x||_3 = \sqrt{(\overline{x}, \overline{x})} \Leftrightarrow ||A||_3 = \sqrt{max \lambda_i (A^*A)}$
+
+    А что есть норма матрицы?\\
+    $$||A|| = \sup_{x\neq0}\frac{||Ax||}{||x||}$$
+    $$||A||_1 = \sup_{x\neq0}\frac{||Ax||_1}{||x||_1}$$
+    $$||\lambda A|| = ||\lambda||||A||$$
+    $$||AB|| \leq ||A||||B||$$
+    $$||A|| = 0 \Leftrightarrow A = 0$$
+    $$||Ax|| \leq ||A||||x||$$
+    
+    Норма x согласована с нормой А.
+    
+    $||A\overrightarrow{x}||_1 = |\Sigma a_{ij}x{j}| \leq max(\Sigma |a_{ij}||x_j| \leq (max \Sigma |a_{ij}|) max |x_j| = (max \Sigma |a_{ij}) ||x||_1$
+    
+    Найдём решение:\\
+    $y_k = {sign a_{k1}, ..., sign a_{kn}}$\\
+    Пусть при i = k достигается максимум.\\
+    Со второй нормой всё то же самое.\\
+    А зачем мы всё это делали? Для того, чтобы перейти к разговору про погрешности. Оцениваем погрешность
+    
+    Теорема
+    $$\frac{||\Delta x||}{||x||} \leq \frac{\mu}{1- \mu_0 \frac{||\Delta A||}{||A||}} ( \frac{||\Delta A||}{||A||} + \frac{||\Delta f||}{||f||})$$
+    
+    Здесь $\mu$ - число обусловленности
+    $$\mu = ||A|| \cdot ||A||^{-1}$$
+    
+    Если $\mu$ находится в пределах от 1 до 100. Если у нас $\mu >> 100$, то задача плохо обусловлена!!! 
+    
+    В большинстве случаев считаем $\Delta A = 0$. Значит,
+    $$\frac{||\Delta x||}{||x||} = \mu \frac{||\Delta f||}{||f||}$$
+
+    Здесь грубая оценка для $\mu$:
+    
+    $$\mu = ||A||\cdot||A||^{-1}$$
+
+    Точная:
+    
+    $$\nu = \frac{||\overrightarrow{f}||}{||\overrightarrow{x}||} \cdot ||A||^{-1}$$
+    
+    Пример, задача. Надо найти $\mu_{1, 2, 3}$ для 
+    ||Ax|| = b
+    \\
+    A = \begin{bmatrix}
+       50 & 70  \\[0.3em]
+       70 & 101 \\[0.3em]
+    \end{bmatrix}
+    b = \begin{bmatrix}
+       120 \\[0.3em]
+       171 \\[0.3em]
+    \end{bmatrix}\\
+    
+    $A^{-1} = \frac{1}{det A}$ \begin{bmatrix}
+       50 & 70  \\[0.3em]
+       70 & 101 \\[0.3em]
+    \end{bmatrix}
+    \newpage
+    $$||A||_1 \cdot ||A||^{-1}_1 = 171 \frac{171}{150}$$\\
+    $$||A||_2 \cdot ||A||^{-1}_2 = \frac{171 \cdot 171}{150}$$\\
+    
+    Т.к. матрица симметрична, то\\
+    $$||A||_3 = \sqrt{\max \lambda(A^T\cdot A)} = \sqrt{\lambda(A^2)} = \max\limits_{i} |\lambda_i (A)|$$
+    $$\mu_3 = ||A||_3 \cdot ||A||_3 ^{-1} = \frac{\max \lambda(A)}{\min \lambda(A)} = 150$$
+    
+\end{document}
+
