@@ -1,0 +1,223 @@
+\documentclass[a4paper,12pt]{article} 
+\usepackage[T2A]{fontenc}			
+\usepackage[utf8]{inputenc}			
+\usepackage[english,russian]{babel}	
+\usepackage{amsmath,amsfonts,amssymb,amsthm,mathrsfs,mathtools} 
+\usepackage{cancel}
+\usepackage{hhline}
+\usepackage{multirow}
+\usepackage[colorlinks, linkcolor = purple, citecolor = purple]{hyperref}
+\usepackage{upgreek}\usepackage[left=2cm,right=2cm,top=2cm,bottom=3cm,bindingoffset=0cm]{geometry}
+\usepackage{tikz}
+\usepackage{graphicx}
+\usepackage{subfig}
+\usepackage{titletoc}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{xcolor}
+\usepackage{wrapfig}
+\usepackage{todonotes}
+
+\newcommand\myworries[1]{\textcolor{red}{TODO #1}}
+
+\title{Sem3Synopsis}
+\author{Александр Мишин, Б01-008а}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section{Семинар}
+    Из прошлого - мы ввели нормы. Ввели - и хорошо.\\
+    Сегодня цель - рассмотреть несколько прямых методов.\\
+    Что из себя представляет любой прямой метод? - получим ответ.\\
+    
+\subsection{Прямые(точные) методы для решения СЛАО}
+    Компьютер не идеален => компьютер даёт погрешность(из прошлого, к ней - 2 лаба).\\
+    Кроме метода Гаусса, в линале мы использовали метод Крамера. Он тоже прямой.\\
+    $$Ax = b$$
+    
+    Давайте посмотрим базовые вещи.\\
+    
+\subsubsection{Метод Гаусса}
+    \begin{bmatrix}
+       a_{11} & a_{12} & ... & a_{1n} \\[0.3em]
+       a_{21} & a_{22} & ... & a_{2n} \\[0.3em]
+       ... & ... & ... & ... \\[0.3em]
+       a_{n1} & a_{n2} & ... & a_{nn} \\[0.3em]
+    \end{bmatrix}
+    \\
+    Прямой метод Гаусса:\\
+    итерации:\\
+    $$\alpha_i^k = \frac{a_{i1} ^ {k-1}}{a_{11} ^ {k-1}}$$
+    $$a_{ij}^k = a_{ij} ^ {k-1} - \alpha_i^{k} a_{ij}^{k-1}$$
+    $$b_i^k = b_i^{k-1} - \alpha_i^k b_i^{k-1}$$
+    $$a_{ij}^k = a_{ij}^{k-1}; b_i^k = b_i^{k-1}; i \leq k; j = \overline{1, n}$$
+    
+    Также у нас есть обратный ход:
+    $$x_n = \frac{b_n^{n-1}}{a_{nn}^{n-1}}$$
+    $$x_k = \frac{b_k^{n-1} - \sum_{j=k+1}^n a_{kj}^{n-1} x_j}{a_{kk}^{n-1}}; k = \overline{(n-1), 1}$$
+    
+\subsubsection{Метод Гаусса с выбором главного элемента:}
+    Всё то же самое, что м.Г., НО выбирается $\max |a_{ii}^k|$ по всем элементам в строке
+    
+    A = \begin{bmatrix}
+       2 & -1 & 1  \\[0.3em]
+       4 & -2 & 1 \\[0.3em]
+       1 & -4 & 6 \\[0.3em]
+    \end{bmatrix}
+    b = \begin{bmatrix}
+       -3 \\[0.3em]
+        3 \\[0.3em]
+       11 \\[0.3em]
+    \end{bmatrix}\\
+    \begin{bmatrix}
+       2 & -1 & 1  \\[0.3em]
+       4 & -2 & 1 \\[0.3em]
+       1 & -4 & 6 \\[0.3em]
+    \end{bmatrix}
+    \xrightarrow{}
+    \begin{bmatrix}
+       6 & 1 & -4  \\[0.3em]
+       1 & 2 & -4 \\[0.3em]
+       1 & 4 & 2 \\[0.3em]
+    \end{bmatrix}
+    \xrightarrow{}
+    \begin{bmatrix}
+       6 & 1 & -4 & | & 11\\[0.3em]
+       0 & \frac{11}{6} & -\frac{10}{3} & | & \frac{-29}{6}\\[0.3em]
+       0 &  \frac{23}{6} &  -\frac{4}{9} & | & \frac{7}{4}\\[0.3em]
+    \end{bmatrix}
+    \xrightarrow{}
+    \begin{bmatrix}
+       6 & 1 & -4 & | & 11\\[0.3em]
+        & \frac{23}{6} & \frac{4}{3} & | & \frac{7}{6}\\[0.3em]
+        &  \frac{11}{6} &  \frac{10}{3} & | & \frac{-29}{6}\\[0.3em]
+    \end{bmatrix}\\
+    
+    $$6x_3 + x_1 -4x_2 = 11$$
+    $$\frac{23}{6}x_1 -\frac{4}{3}x_2 = \frac{7}{6}$$
+    $$372x_2 = 744$$
+    
+    Отсюда обратный метод и находим $x_2 =2, x_1 = 1, x_3 = 3$\\
+    
+    Вспомнили, прослезились.
+\subsubsection{LU метод}    
+    А теперь - хотим сделать так:
+    $$Ax = b \xrightarrow{} LUx = b$$
+    L = \begin{bmatrix}
+       1 & 0 & ... & 0 \\[0.3em]
+       l_{21} & 1 & ... &0 \\[0.3em]
+       ... & ... & ... & ... \\[0.3em]
+       l_{n1} & l_{n2} & ... & 1 \\[0.3em]
+    \end{bmatrix}
+    ;
+    U = \begin{bmatrix}
+       d_{11} & d_{12} & ... & d_{1n} \\[0.3em]
+       0 & d_{22} & ... & d_{2n} \\[0.3em]
+       ... & ... & ... & ... \\[0.3em]
+       0 & 0 & ... & d_{nn} \\[0.3em]
+    \end{bmatrix}\\
+    
+    A = \begin{bmatrix}
+       10 & -7 & 0 \\[0.3em]
+       -3 & 6 & 2 \\[0.3em]
+       5 & -1 & 5 \\[0.3em]
+    \end{bmatrix};
+    L = \begin{bmatrix}
+       1 & 0 & 0 \\[0.3em]
+       l_{21} & 1 & 0 \\[0.3em]
+       l_{31} & l_{32} & 1 \\[0.3em]
+    \end{bmatrix};
+    U = \begin{bmatrix}
+       10 & -7 & 0 \\[0.3em]
+       0 & d_{22} & d_{23} \\[0.3em]
+       0 & 0 & d_{33} \\[0.3em]
+    \end{bmatrix}\\
+    \\
+    Из этих матриц и предыдущих высказываний находим все $l_{ij}, d_{ij}$.
+    $$d_{1i} = a_{1i}$$
+    $$d_{22} = \frac{39}{10}$$
+    $$d_{23} = 2$$
+    $$l_{21} = -0.3$$
+    $$l_{31} = 0.5$$
+    $$l_{32} = \frac{25}{39}$$
+    $$d_{33} = ...$$
+
+    Чтобы разложение было возможно, надо проверять, что все главные миноры матрицы А отличны от нуля. Не забываем, что чаще всего подбираются удачные матрицы. \\
+    
+\subsubsection{Метод квадратного корня}
+    $Ax = b$. Предположим, что А - симметричная. Тогда мы можем $A = LL^T$.\\
+    L = \begin{bmatrix}
+       l_{11} & 0 & ... & 0 \\[0.3em]
+       l_{21} & l_{22} & ... &0 \\[0.3em]
+       ... & ... & ... & ... \\[0.3em]
+       l_{n1} & l_{n2} & ... & l_{nn} \\[0.3em]
+    \end{bmatrix}\\
+
+    $$l_{11} = \sqrt{a_{11}}$$
+    $$l_{ik} = \frac{a_{ik} - \sum_{j=1}^{k-1}l_{ik}l_{kj}}{l_{ii}}$$
+
+    \begin{bmatrix}
+       6.25 & -1 & 0.5 & | & 7.5  \\[0.3em]
+       -1 & 5 & 2.12 & | & -8.68\\[0.3em]
+       0.5 & 2.12 & 3.6 & | & -0.24\\[0.3em]
+    \end{bmatrix}
+
+    
+
+    $$l_{11} = \sqrt{6.25} = 2.5$$
+    $$l_{22} = \frac{a_{21}}{l_{11}} = \frac{-1}{2.5} = -0.4$$
+    $$l_{31} = \frac{0.5}{2.5} = 0.2$$
+    $$l_{22} = \sqrt{5 - (-0.4)^2} = 2.2$$
+    $$l_{32} = ... = 1$$
+    $$l_{33} = ... = 1.6$$
+    $$L^T x = y ; Ly = b$$
+    Получаем решение (0.8, -2, 1)
+
+\subsection{Итерационный метод}
+    Итерационные методы для решения СЛАУ.\\
+\subsubsection{Метод простой итерации}
+    $Ax = b \xrightarrow{} Ax + x = b + x \xrightarrow{} x = x - Ax + b \xrightarrow{} x_k = (E-A)x_{k-1} + b$\\
+    $Ax = b \xrightarrow{} x_k = Bx_{k-1} + F$\\
+
+    Теорема[Достаточное условие сходимости:]\\
+    Если ||В||= q < 1, то существует единственное решение $x^*$ уравнения $x = Bx + F$ при любомначальном приближении $x_0$ И.П. сходится, причём 
+    $$||x^{(k)} - x^*|| \leq q^k ||x^0 - x^*||$$
+    Похоже на геом. прогрессии.
+    
+    Теорема[Критерий сходимости МПИ]\\
+    Необходимо и достаточно $|\lambda(B)| < 1$
+    
+\subsubsection{Однопараметрический метод простой итерации}
+    $$x_k = (E-\tau A) x_{k-1} + \tau b$$
+
+\subsubsection{Метод Якоби}
+    $$A = L + D + U$$
+    L - нижняя треугольная, D - диагональная, U - верхняя треугольная.
+    $$Lx + Dx + Ux = b \xrightarrow{} Lx_k + Dx_{k+1} + Ux_k = b$$
+    $$x_{k+1} = D^{-1} (L + U)x_k + D^{-1}b$$
+    
+    Теорема [Критерий сходимости метода Якоби:]\\
+    det\begin{bmatrix}
+       $\lambda$a_{11} & a_{12} & ... & a_{1n} \\[0.3em]
+       a_{21} & $\lambda$a_{22} & ... & a_{2n} \\[0.3em]
+       ... & ... & ... & ... \\[0.3em]
+       a_{n1} & a_{n2} & ... & $\lambda$a_{nn} \\[0.3em]
+    \end{bmatrix} = 0, если $|\lambda| < 1$
+
+\subsubsection{Метод Зейделя}
+    $$A = L + D + U$$
+    L - нижняя треугольная, D - диагональная, U - верхняя треугольная.
+    $$Lx + Dx + Ux = b \xrightarrow{} Lx_{k+1} + Dx_{k+1} + Ux_k = b$$
+    $$x_{k+1} = -(L+D)^{-1} Ux_k + (L+D)^{-1}b$$
+    
+    Теорема [Критерий сходимости метода Зейделя]\\
+    det\begin{bmatrix}
+       $\lambda$a_{11} & a_{12} & ... & a_{1n} \\[0.3em]
+       $\lambda$a_{21} & $\lambda$a_{22} & ... & a_{2n} \\[0.3em]
+       ... & ... & ... & ... \\[0.3em]
+       $\lambda$a_{n1} & $\lambda$a_{n2} & ... & $\lambda$a_{nn} \\[0.3em]
+    \end{bmatrix} = 0, если $|\lambda| < 1$
+\end{document}
