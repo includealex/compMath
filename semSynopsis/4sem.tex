@@ -1,0 +1,189 @@
+\documentclass[a4paper,12pt]{article} 
+\usepackage[T2A]{fontenc}			
+\usepackage[utf8]{inputenc}			
+\usepackage[english,russian]{babel}	
+\usepackage{amsmath,amsfonts,amssymb,amsthm,mathrsfs,mathtools} 
+\usepackage{cancel}
+\usepackage{hhline}
+\usepackage{multirow}
+\usepackage[colorlinks, linkcolor = purple, citecolor = purple]{hyperref}
+\usepackage{upgreek}\usepackage[left=2cm,right=2cm,top=2cm,bottom=3cm,bindingoffset=0cm]{geometry}
+\usepackage{tikz}
+\usepackage{graphicx}
+\usepackage{subfig}
+\usepackage{titletoc}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{xcolor}
+\usepackage{wrapfig}
+\usepackage{todonotes}
+
+\newcommand\myworries[1]{\textcolor{red}{TODO #1}}
+
+\title{Sem4Synopsis}
+\author{Александр Мишин, Б01-008а}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section{Ошибка из прошлого семинара}
+
+Было 2 метода -  Метод Якоби и Метод Зейделя.
+
+\subsection{Метод Якоби}
+    $$x_{k+1} = D^{-1} (L + U)x_k + D^{-1}b$$
+    Теорема [Критерий сходимости метода Якоби:]\\
+    det\begin{bmatrix}
+       $\lambda$a_{11} & a_{12} & ... & a_{1n} \\[0.3em]
+       a_{21} & $\lambda$a_{22} & ... & a_{2n} \\[0.3em]
+       ... & ... & ... & ... \\[0.3em]
+       a_{n1} & a_{n2} & ... & $\lambda$a_{nn} \\[0.3em]
+    \end{bmatrix} = 0, если $|\lambda| < 1$
+\subsection{Метод Зейделя}
+    $$x_{k+1} = -(L+D)^{-1} Ux_k + (L+D)^{-1}b$$
+    Теорема [Критерий сходимости метода Зейделя]\\
+    det\begin{bmatrix}
+       $\lambda$a_{11} & a_{12} & ... & a_{1n} \\[0.3em]
+       $\lambda$a_{21} & $\lambda$a_{22} & ... & a_{2n} \\[0.3em]
+       ... & ... & ... & ... \\[0.3em]
+       $\lambda$a_{n1} & $\lambda$a_{n2} & ... & $\lambda$a_{nn} \\[0.3em]
+    \end{bmatrix} = 0, если $|\lambda| < 1$
+
+\section{Семинар}
+
+    A = \begin{bmatrix}
+       \alpha & 0 & \beta \\[0.3em]
+        0 & \alpha & 0 \\[0.3em]
+        \beta & 0 & \alpha \\[0.3em]
+    \end{bmatrix}\\
+    Найти критерий сходимости МПИ.\\
+    МПИ:\\
+    $x_{k+1} = Bx_k + f$ \hspace{1cm} $B = E - A$
+    $$det |B - \lambda E| = ((1- \alpha) - \lambda) ^ 3 - \betta((1-\alpha) - \lambda) = 0$$
+    Отсюда находим $\lambda_i$.
+    
+    По методу Якоби:
+    det \begin{bmatrix}
+       \lambda \alpha & 0 & \beta \\[0.3em]
+        0 & \lambda \alpha & 0 \\[0.3em]
+        \beta & 0 & \lambda \alpha \\[0.3em]
+    \end{bmatrix} = 0\\
+
+    По методу Зейделя:
+     det \begin{bmatrix}
+       \lambda \alpha & 0 & \beta \\[0.3em]
+        0 & \lambda \alpha & 0 \\[0.3em]
+        \lambda \beta & 0 & \lambda \alpha \\[0.3em]
+    \end{bmatrix} = 0\\
+
+    Существует семейство однопараметрических методов, где вводится парамер $\tau$.
+    $$x_{k+1} = (E-\tau A)x_k + \tau f$$
+    
+    Необходимое и достаточное условие сходимости : $|\lambda(E-\tau A)| < 1 \Rightarrow{} |1-\tau \lambda(A)| < 1$.//
+    
+    $\tau$ отвечает за скорость сходимости (норма матрицы В, она же норма матрицы итерационного процесса). Существует много частных случаев. Один из таких - если матрица симметрична, то 
+    $$0 < \tau < \frac{2}{\lambda_{max}}$$
+    $$\tau_\text{оптимальное} = \frac{2}{\lambda_{max} + \lambda_{min}}$$
+    
+    Задаётся вопрос, а при каких начальных приближениях $x^0$ будет сходиться метод?\\
+    A = \begin{bmatrix}
+       5 & 4 \\[0.3em]
+       1 & 2 \\[0.3em]
+    \end{bmatrix} \hspace{1cm}
+    f = \begin{bmatrix}
+        2 \\[0.3em]
+        4 \\[0.3em]
+    \end{bmatrix}\\
+    
+    Находим собственные числа матрицы А: $\lambda_1 = 1,  \hspace{0.3cm} \lambda_2 = 6$.
+    Отсюда система уравнений $|1-\tau| < 1, |1-6\tau| < 1 \Rightarrow{} 0 < \tau < \frac{1}{3}$.\\
+    
+    Для $\tau = 0.1$ сходимость с любого начального приближения. Для $\tau = 2$ - не будет сходиться с любого начального приближения.\\
+    
+     A = \begin{bmatrix}
+       3 & 4 \\[0.3em]
+       1 & 3 \\[0.3em]
+    \end{bmatrix} \hspace{1cm}
+    f = \begin{bmatrix}
+        1 \\[0.3em]
+        1 \\[0.3em]
+    \end{bmatrix}\\
+    
+    Постройте сходящийся однопараметрический метод простой итерациии.\\
+    
+    Что будем делать? Можно за два преобразования гарантировать, что метод будет сходящийся.
+    Матрица не симметрична - что же делать для ускорения? Привести матрицу А к симметричной. Матрица А хочет стать в виде матрицы. Вот алгоритм для крафта симметричной матрицы, умножая на транспонированную.
+    $A^T A \overrightarrow{u} = \overrightarrow{f}$
+    $$B \overrightarrow{u} = F'$$
+    $$u_{k+1} = (E-\tau B)u_k + \tau F'$$
+    $$0 < \tau < \frac{2}{\lambda_{max} (B)} = 0.053 $$
+    
+    Ок, оно сходится. А как оценить количество итераций, за которое сходится?\\
+    
+    Ловим аптечку, она же формула: 
+    $$N = [\frac{\ln {\varepsilon \frac{1-q}{||F||}}}{\ln q}]_\text{целая часть} + 1$$
+    здесь $\varepsilon$ - точность, q - норма матрицы итерационного процесса.\\
+    $$u^{(0)} = (0, 0) ^ T$$
+    
+    У нас F будет зависеть от $\tau$: $F = \tau F'$. Количество итераций будет зависить от $\tau$. Посчитаем для оптимального $\tau$ количество итераций. Напоминание, что мы получили B: \\
+    B = \begin{bmatrix}
+      25 & 18 \\[0.3em]
+      18 & 13 \\[0.3em]
+    \end{bmatrix} \\
+    
+    $$\tau_\text{оптимальное} = \frac{1}{19}$$
+    $$F = \tau_\text{оптимальное} A^T$$
+    F = $\frac{1}{19}$ \cdot \begin{bmatrix}
+      7 \\[0.3em]
+      5\\[0.3em]
+    \end{bmatrix} \\
+    $|E-\tau B|$ = $\frac{1}{19}$\begin{bmatrix}
+     -6 & -18 \\[0.3em]
+     -18 & 6 \\[0.3em]
+    \end{bmatrix} \\
+    
+    $$||F||_1 = \frac{17}{13}$$
+    $$||F||_2 = \frac{24}{19}$$
+    Проводим оценку в первой норме:\\
+    Достаточное условие сходимости не выполняется для первых двух норм.\\
+    
+    $$||F||_3 = \frac{\sqrt{74}}{19}$$
+    $$||E - \tau B||_3 = max |\lambda_i (E - \tau B)| = \frac{6\sqrt{10}}{19} < 1$$
+    
+    В итоге если подставить:\\
+    $$N = 9155 \text{ итераций.}$$
+    
+    \subsection{Метод Релаксации}
+    
+    A = L + D + U
+    Здесь в роли параметра $\omega$:\\
+    $$(\omega L u^{k+1} + Du^{k+1}) + (\omega - 1)Du^k +\omega U u^k = \omega f$$
+    При $\omega = 1$ будет метод Зейделя.
+    $$u^{k+1} = -(D + \omega L)^{-1} [(\omega - 1)D + \omega L]u^k + \omega (D + \omega L)f$$
+    Известно, что 
+    $$0 < \omega_\text{оптимальное} < 2$$
+    Для положительно определённой матрицы,
+    $$1 < \omega_\text{оптимальное} < 2$$
+    - это уже метод верхней релакцсации.
+    Метод нижней релаксации:
+    $$0 < \omega_\text{оптимальное} < 1$$
+    
+    Если матрица А оказыавется симметричной, то параметр релаксации будет выражаться через конечное выражение.\\
+    
+\section{Полезности для домашней лабораторной работы:}
+    \subsection*{Степенной метод}
+    $$A = A_{n \times n}$$
+    $$|\lambda_1| \geq |\lambda_2| \geq |\lambda_n|$$
+    $$y^k = Ay^{k-1}$$
+    $$\lambda_1 = \frac{y^k}{y^{k-1}}$$
+    Критерий останово:
+    $$\varepsilon^k = |\lambda_1^{(k)}-\lambda_1^{(k-1)}| \geq \varepsilon$$
+    Невязка:
+    $$Ax_k = f$$
+    $$r_k = ||f-Ax_k||$$
+    $$r_k < \varepsilon \text{ - невязка}$$
+    
+\end{document}
+
