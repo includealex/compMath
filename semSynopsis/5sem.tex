@@ -1,0 +1,109 @@
+\documentclass[a4paper,12pt]{article} 
+\usepackage[T2A]{fontenc}			
+\usepackage[utf8]{inputenc}			
+\usepackage[english,russian]{babel}	
+\usepackage{amsmath,amsfonts,amssymb,amsthm,mathrsfs,mathtools} 
+\usepackage{cancel}
+\usepackage{hhline}
+\usepackage{multirow}
+\usepackage[colorlinks, linkcolor = purple, citecolor = purple]{hyperref}
+\usepackage{upgreek}\usepackage[left=2cm,right=2cm,top=2cm,bottom=3cm,bindingoffset=0cm]{geometry}
+\usepackage{tikz}
+\usepackage{graphicx}
+\graphicspath{ {./pictures/} }
+\usepackage{subfig}
+\usepackage{titletoc}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{xcolor}
+\usepackage{wrapfig}
+\usepackage{todonotes}
+
+\newcommand\myworries[1]{\colorbox{red!30}{TODO #1}}
+\newcommand\attention[1]{\colorbox{cyan!30}{#1}}
+
+\title{Sem5Synopsis}
+\author{Александр Мишин, Б01-008а}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section{Методы решения нелинейных уравнений и систем}
+
+Примеры того, что мы будем решать:
+\[ x + \ln{x} = 0\]
+Общий вид нелин. уравнения:
+\[f(x) = 0\]
+
+Для решения нелинейного уравнения нужно проделать локализацию корней. А затем только - уже применить численный метод на отрезке локализации. Что имеется в виду? Где находятся корни? Можно делать вывод из ОДЗ. Но на практике - либо графический способ, либо аналитический. Например, что мы знаем, если мы взяли [a, b] и знаем, что f(a) * f(b) < 0. \attention{Цель локализации - понять, на каком промежутке искать ответ.}\\
+
+Мы будем искать решение нелинейного уравнения, применив итерацию.
+\[x_{n+1} = \varphi(x_n)\]
+
+\section{Принцип сжимающих отображений, базовые понятия}
+
+\attention{Метрическое пространство} - введено понятие расстояния c cоответствующими неравенствами.\\
+\attention{Фнудаментальная последовательность} - последовательность называется фундаментальной, если 
+\[\forall \varepsilon > 0  \exists h_\varepsilon \forall k \geq \varepsilon \& \forall m \geq n_\varepsilon \longmapsto \rho(x_m, x_n) \leq \varepsilon\]
+\attention{Полное метр. пространство} - метрическое пространство называется полным, если всякая фундаментальная последовательность является сходящейся.\\
+Оператор А осуществляет \attention{сжимающее отображение} мерт пр-ва К в себя, если $\exists 0 < q < 1$, что $\forall x \& \forall y \in \mathds{R}$ имеет место неравенство 
+\[\rho (Ax, Ay) \leq qp(x,y)\]
+
+\subsection*{Метод сжимающих отображений}
+    Пусть R -метрическое пространство и оператор А  - осуществляет сж.о. R в себя. Тогда уравнение Ах = х имеет единственное решение, которое может быть получено как предел последовательности $x_{n+1} = Ax_n$.
+
+\subsection*{Достаточное условие cходимости МПИ(НУ)}
+\[\rho(x_{n+1}, x) = |x_{n+1} - x^*| = \varphi(x_n) - \varphi(x^*) = |\varphi_x^{'} (\xi)||x_n-x^*| \leq q\]
+Вывод - МПИ(НУ) сходится $\forall x_0$, принадлежащей области локализации корня, если $q = |\varphi_x^{'}(\xi)| < 1$, где $\xi$ - любое число из области локализации.\\
+
+\subsection*{Порядок сходимости}
+    \[\varphi_x^{'} (x^*) = \varphi_x^{"}(x^*) = ... = \varphi_x^{s} (x^*) = 0\]
+    n - порядок сходимости $\varphi^{(n)} (x^*) \neq 0$
+    
+\subsection*{Условие достижимости точности }
+\[|x_n - x^n| \leq \frac{x_{n+1} - x{n}}{1 - q} \leq \frac{q^n}{1 - q} |x_1 - x_0| \leq \varepsilon\]
+
+\subsection*{Пример 1, Полином}
+\[f(x) = x ^ 3 - x ^ 2 - 9x + 9 = 0\]
+По т.Виетта или \attention{т.Декарта} понимаем, что всего один отрицательный корень.\\
+В предположении, что есть один корень ~ 1, мы можем предположить, что область локализации от 0.5 до 1.5. Для отрицательного корня предположим, что область локализации [2, 4]. И ещё одна область [1 , 2].\\
+Нам нужно построить какой-нибудь метод для поиска корня.
+\[x_{n+1} = \sqrt[3]{x_n^2 + 9x_n - 9}\]
+\[x_{n+1} = \frac{x_n^2}{9} - \frac{x_n^2}{9} + 1\]
+
+\[\varphi^{'}(x) = |\frac{x^2}{3} - \frac{2}{9}x| < 1\]
+Для отрезка [0.5, 1.5] можно применять.
+
+\[\varphi ^{'}(x) = \frac{1}{3}\frac{2x + 9}{(x^2 + 9x + 9)^2}\]
+
+Можем рассмотреть на отрезке [-4, -2], [2, 4]. Метод пригоден для этих двух участков.\\
+
+\subsection*{Пример 2}
+\[x = \ctg{x}\]
+известен корень $x^* \approx 0.86$. Есть 4 метода:
+
+\[1) x_{n+1} = \ctg{x_n}\]
+\[2) x_{n+1} = \arcctg{x_n}\]\
+\[3) x_{n+1} = 2\arcctg{x_n} - x_n\]
+\[4) x_{n+1} = \frac{2}{7}x_n + \frac{5}{7}\arcctg{x_n}\]
+Ищем производные\\
+\[|\varphi_1| = \frac{1}{\sin^2{(x^*)}} > 1\]
+\[|\varphi_2| = \frac{1}{1 + (x^*)^2} \approx 0.57 < 1\]
+\[|\varphi_3| = |\frac{-2}{1+(x^*)^2} - 1| = |\frac{-(x^*)^2 - 3}{1 + (x^*)^2}| = \frac{3 + (x^*)^2}{1 + (x^*)^2} > 1 \]
+\[|\varphi_4| = |\frac{2}{7} - \frac{5}{7}\frac{1}{1+(x^*)^2}| = |\frac{1}{7}\frac{2(x^*)^2 - 3}{1 + (x^*)^2}| \approx 0.12 < 1\]
+Подходят 2 и 4, выбираем 4. Потому что чем меньше q, тем лучше сжатие.
+
+\subsection*{Пример 3}
+\[x^2 - e^{-x} = 0\]
+        \begin{figure}[h!]
+            \centering
+            \includegraphics[width=12cm]{5SemPic1.png}
+            \caption{Схема экспериментальной установки}
+            \label{fig:vac}
+        \end{figure}
+        
+        Какой метод берём?
+        Из производной функции. А локализацию мы получили из графического метода.
+\end{document}
