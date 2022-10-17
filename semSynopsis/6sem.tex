@@ -1,0 +1,117 @@
+\documentclass[a4paper,12pt]{article} 
+\usepackage[T2A]{fontenc}			
+\usepackage[utf8]{inputenc}			
+\usepackage[english,russian]{babel}	
+\usepackage{amsmath,amsfonts,amssymb,amsthm,mathrsfs,mathtools} 
+\usepackage{cancel}
+\usepackage{hhline}
+\usepackage{multirow}
+\usepackage[colorlinks, linkcolor = purple, citecolor = purple]{hyperref}
+\usepackage{upgreek}\usepackage[left=2cm,right=2cm,top=2cm,bottom=3cm,bindingoffset=0cm]{geometry}
+\usepackage{tikz}
+\usepackage{graphicx}
+\graphicspath{ {./pictures/} }
+\usepackage{subfig}
+\usepackage{titletoc}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{xcolor}
+\usepackage{wrapfig}
+\usepackage{todonotes}
+
+\newcommand\myworries[1]{\colorbox{red!30}{TODO #1}}
+\newcommand\attention[1]{\colorbox{cyan!30}{#1}}
+
+\title{Sem6Synopsis}
+\author{Александр Мишин, Б01-008а}
+\date{}
+\begin{document}
+
+\maketitle
+
+\section{Метод Ньютона}
+
+\subsection*{\attention{Теорема о сходимости итерационного метода Ньютона}}
+Если f(a)f(B) < 0, причём f', f'' непрерывны и знакопостоянны на отрезке локализации [a, b], то если выбрать начальное положение $x_0 \in [a, b] \& f(x_0)f"(x_0) > 0$, то можно вычислить
+\[x_{n+1} = x_n - \frac{f(x_n)}{f'(x_n)}\]
+
+Порядок сходимости
+
+\[|x_{n+1} - x^*| \leq \frac{M_2 |x_n - x^*| ^ 2}{2m_1}\]
+\[M_2 = max|f''(x)|\]
+\[m_a = min|f'(x)|\]
+
+\subsection{Пример}
+
+    \[f(x) = 32x^3 + 20x^2 -11x + 3\]
+    Надо найти число корней, локализацию для хотя бы одной точки и $x_n$.
+\subsubsection{Шаг 1}
+    По теореме Декарта, 
+    \[f(-x) = -32x^3 + 20x^2 + 11x + 3\]
+    Значит, всего один корень.
+\subsubsection{Шаг 2}
+    Рассмотрим отрезок локализации f(-1) > 0 $\&$ f(-2) < 0
+\subsubsection{Шаг 3}
+    Выпишем первые производные
+    
+    \[f'(x) = 96x^2 + 40x -11\]
+    \[f''(x) = 192x + 40\]
+    
+    По условию теоремы, они должны быть знакопостоянны и непрерывны на отрезке [-2, -1].\\
+    Проверяем, удостоверились.\\
+    Значит, $x_0 \in [-2, -1]$
+    Если бы знак менялся, то нужно было бы отсекать отрезок так, чтобы условия теоремы выполнялись.
+
+\subsection{Модифицированный метод Ньютона}
+    \[x_{n+1} = x_n - J^{-1}(x_n) F(x_n)\]
+
+
+\section{Перекладываем все методы на СНАУ.}
+    $$\overrightarrow{F}(\overrightarrow{x}) = 0$$
+    Для достаточного условия сходимости метода простой итерации для систем нелинейных уравнений достаточно того, чтобы норма матрицы Якоби $\leq 1$. 
+    $$J = ||\frac{\partial \varphi _i}{\partial x_i}||$$
+
+    \[\overrightarrow{x_{n+1}} = \overrightarrow{x_n} - J ^ {-1} (x_n) F(x_n)\]
+    \[J = ||\frac{\partial F_i}{\partial x_i}||\]
+
+\subsection{Пример}
+    Найти корни системы нелинейных уравнений:
+    \[2x_1^2 - x_1 x_2 - 5x_1 + 1 = 0\]
+    \[x_1 + 3lgx_1 - x_2^2 = 0\]
+    
+    \attention{Метод простой итерации}
+    Что надо сделать? Прежде всего, надо попытаться найти область локализации. С точки зрения локализации нелинейных уравнений. Можно построить графически. \newpage
+    
+    \begin{figure}[h!]
+        \centering
+        \includegraphics[width=12cm]{6SemPic1.png}
+        \label{fig:vac}
+    \end{figure}
+
+    Видим, что есть две точки пересечения. А как? Ведь значений точек пересечений изначально нет. Выразим $x_1$ и $x_2$.
+
+    \[x_1 = \frac{x_1 (x_2 + 5) - 1}{2}\]
+    \[x_2 = \sqrt{x_1 + 3lgx_1}\]
+
+    Мы составляем матрицу Якоби. Берём область локализации корня
+    $$G = \{|x_1 - 3,5| \leq 0.1, |x_2 - 2,2| \leq 0.1\}$$
+
+    Работаем в первой норме.
+    $$max \{\Sigma|\frac{\partial \varphi_1}{\partial x_i}|, \Sigma|\frac{\partial \varphi_2}{\partial x_i}|\} < 1$$
+    Получим оценки для $\frac{\partial \varphi_i}{x_i}$.\\
+    Как видим,     
+    $$max \{\Sigma|\frac{\partial \varphi_1}{\partial x_i}|, \Sigma|\frac{\partial \varphi_2}{\partial x_i}|\} = 0.54 + 0.27 = 0.81 < 1$$
+    Т.о.
+    \[||J||_1 = 0.81 < 1\]
+    Т.е. достаточные условия выполнены в области локализации.\\
+    
+    А если я захочу решать \attention{методом Ньютона}?
+    \[2x_1^2 - x_1 x_2 - 5x_1 + 1 = 0\]
+    \[x_1 + 3lgx_1 - x_2^2 = 0\]
+    
+    \[\overrightarrow{x_{n+1}} = \overrightarrow{x_n} - J^{-1} \overrightarrow{F}(\overrightarrow{x_n})\]
+    Якобиан находим из исходной функции.
+    
+    
+\section{}
+\end{document}
