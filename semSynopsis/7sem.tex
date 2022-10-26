@@ -1,0 +1,129 @@
+\documentclass[a4paper,12pt]{article} 
+\usepackage[T2A]{fontenc}			
+\usepackage[utf8]{inputenc}			
+\usepackage[english,russian]{babel}	
+\usepackage{amsmath,amsfonts,amssymb,amsthm,mathrsfs,mathtools} 
+\usepackage{cancel}
+\usepackage{hhline}
+\usepackage{multirow}
+\usepackage[colorlinks, linkcolor = purple, citecolor = purple]{hyperref}
+\usepackage{upgreek}\usepackage[left=2cm,right=2cm,top=2cm,bottom=3cm,bindingoffset=0cm]{geometry}
+\usepackage{tikz}
+\usepackage{graphicx}
+\graphicspath{ {./pictures/} }
+\usepackage{subfig}
+\usepackage{titletoc}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{xcolor}
+\usepackage{wrapfig}
+\usepackage{todonotes}
+
+\newcommand\myworries[1]{\colorbox{red!30}{TODO #1}}
+\newcommand\attention[1]{\colorbox{cyan!30}{#1}}
+
+\title{Sem7Synopsis}
+\author{Александр Мишин, Б01-008а}
+\date{}
+\begin{document}
+
+\maketitle
+
+\attention{Интерполяция функции}\\
+Лаба по этой теме - coming soon.\\
+Что мы подразумеваем под задачей интерполяции? У нас есть какая-то табличная функция. Например, из 4х точек. А что по точке х*? Можно провести прямую через 4 точки, можно параболу по 3ём. От разной интерполяции будет зависить ответ. Можно построить полином. Приближать можно с помощью доп условий. Например, зная производную в точке. Это будет влиять на интерполяцию.
+
+    \begin{figure}[h!]
+        \centering
+        \includegraphics[width=12cm]{7SemPic1.png}
+    \end{figure}
+
+На что надо опираться при построении полиномов? Существует две формы записи. Форма Ньютона и Лагранжа.\\
+
+\[\text{   Лагранж:} \hspace{0.5cm} L_n(x) = f_0 \frac{(x-x_1)...(x-x_n)}{(x_0 - x_1)...(x_0-x_n)} + f_1 \frac{(x-x_0)...(x-x_n)}{(x_1 - x_0)(x_1 - x_2)...(x_1-x_n)} + f_2 \frac{(x-x_0)...(x-x_n)}{(x_2 - x_1)...(x_2-x_n)}\]
+\[\text{Ньютон: } \hspace{0.2cm}  N_n(x) = b_0 + b_1(x-x_0) + b_2(x-x_0)(x-x_1) + b_n(x - x_0)(x-x_1)...(x-x_n)\]
+
+
+\attention{Таблица разделённых разностей}
+
+\begin{table}[h!]
+\begin{tabular}{|l|l|l|l|}
+\hline
+Точка & b_0 & b_1                                              & b_2 \\ \hline
+x_0  & f_0 &                                                   &      \\ \hline
+x_1  & f_1 & $\frac{f_1 - f_0}{x_1 - x_0}$ &      \\ \hline
+x_2  & f_2 & $\frac{f_2 - f_1}{x_2-x_1}$  & ...  \\ \hline
+x_3  & f_3 & f(x_2, x_3)                                     &      \\ \hline
+x_4  & f_4 & f(x_4, x_3)                                     &      \\ \hline
+x_5  & f_5 & f(x_5, x_3)                                     &      \\ \hline
+\end{tabular}
+\end{table}
+\newpage
+
+С точки зрения программирования, легче кодить через Ньютона.\\
+С точки зрения ошибки интерполяции, $f(x) = P_n(x) + R_n(x)$.\\
+$R_n(x)$ - ошибка интерполяции. Она отвечает за точность.\\
+\[R_n(x) = \frac{f_x^{n+1} (\xi)}{(n+1)!}(x-x_0)...(x-x_n)\]
+\[\xi \in (x_1, x_n)\]
+\[|R_n(x)| \leq |\frac{M_{(n+1)}}{(n+1)!}(x-x_0)...(x-x_n)|\]
+\[M_{n+1} = \max_{x \in [x_0, x_n]}{|f_x ^ {(n + 1)} (x)|}\]
+
+Приближённая строгая оценка для $b_n$:
+\[b_n \approx \frac{f_x^n(x)}{n!}\]
+Но, исходя из этого приближения, метод Ньютона очень похож на ряд Тейлора. Тогда ошибка интерполяции для ф-лы Ньютона - следующий член разложения $b_{n+1}(...)$.\\
+
+\section*{Примеры}
+
+\subsection*{Пример 1}
+\begin{table}[h!]
+\begin{tabular}{|l|r|r|r|r|r|r|r|}
+\hline
+x                       & 0                                           & 0,01                                        & 0,02                                        & 0,03                                            & 0,04                                            & 0,05                                            & 0,06                                            \\ \hline
+f                       & 1                                           & 1,0101                                      & 0,0102                                      & 1,0305                                          & 1,0402                                          & 1,0513                                          & 1,008                                           \\ \hline
+\sigma f & \multicolumn{1}{l|}{10\textasciicircum{}-4} & \multicolumn{1}{l|}{10\textasciicircum{}-4} & \multicolumn{1}{l|}{10\textasciicircum{}-4} & \multicolumn{1}{l|}{2 * 10\textasciicircum{}-4} & \multicolumn{1}{l|}{2 * 10\textasciicircum{}-4} & \multicolumn{1}{l|}{3 * 10\textasciicircum{}-4} & \multicolumn{1}{l|}{8 * 10\textasciicircum{}-4} \\ \hline
+\end{tabular}
+\end{table}
+
+Строим табличку
+\begin{table}[h!]
+\begin{tabular}{|r|r|r|l|l|}
+\hline
+\multicolumn{1}{|l|}{x} & \multicolumn{1}{l|}{b_0} & \multicolumn{1}{l|}{b_1} &                          &                                   \\ \hline
+0,01                    & 1,0101                    & \multicolumn{1}{l|}{}     &                          &                                   \\ \hline
+0,02                    & 0,0102                    & 1,01                      &                          &                                   \\ \hline
+0,03                    & 1,0305                    & 1,03                      & \multicolumn{1}{r|}{1}   &                                   \\ \hline
+0,04                    & 1,0402                    & 1,02                      & \multicolumn{1}{r|}{0,5} & (-0,5 - 1) / (0,04 - 0, 01) = -50 \\ \hline
+\end{tabular}
+\end{table}
+
+$N_2 = ?$
+\[x_2 + 0,48x + 1,0002 = N_2(x) = 1,0101 + 1,01(x-0,01) + 1(x-0,01)(x-0,02)\]
+$R_2(0,015) = ?$
+\[1 - 50 \cdot (0,015 - 0,01)(0,015 - 0,02)(0,015-0,03) = 18 \cdot 10^{-6}\]
+$Error(0,015) = ?$
+$$\Delta f_0 = 10^{-4}$$
+$\Delta L_3(0,015) =  10^{-4}\frac{(0,015-0,002)(0,015-0,003)}{(0,01-0,02)(0,01-0,03)} + 10^{-4}\frac{(0,015-0,001)(0,015-0,003)}{(0,02-0,01)(0,02-0,03)} + 
+2\cdot 10^{-4}\frac{(0,015-0,001)(0,015-0,002)}{(0,03-0,01)(0,03-0,02)}$
+\[Error(0,015) = \Delta L_3(0,015) = 125 \cdot 10^{-6}\]
+
+\subsection*{Пример 2}
+\[f(x) = x \ln{x} - 1\]
+Надо найти решение x*, чтобы f(x*) = 0.
+Изначально нужно локализовать. Отрезок локализации: $x* \in [1.6, 1.9]$. Строим таблицу значений.
+\begin{table}[h!]
+\begin{tabular}{|l|r|r|r|r|}
+\hline
+x & 1,6      & 1,7      & 1,8    & 1,9     \\ \hline
+f & -0,24799 & -0,09793 & 0,05801 & 0,21952 \\ \hline
+\end{tabular}
+\end{table}
+
+Строим полином вида $x_3(f)$. Далее рассматриваем $x_3(0)$. Это и будет х* = 1.76322.
+Линейная интерполяция: \\
+\[x_1(f) = 1.7 \cdot \frac{-0.05801}{-0.09793-0.05801} + 1.8 \cdot \frac{0.09793}{0.05801 + 0.09793} = 1.76739\]
+С точностью до третьего знака после запятой ответ верный.
+
+\attention{Задача экстраполяции}
+
+
+\end{document}
