@@ -1,0 +1,131 @@
+\documentclass[a4paper,12pt]{article} 
+\usepackage[T2A]{fontenc}			
+\usepackage[utf8]{inputenc}			
+\usepackage[english,russian]{babel}	
+\usepackage{amsmath,amsfonts,amssymb,amsthm,mathrsfs,mathtools} 
+\usepackage{cancel}
+\usepackage{hhline}
+\usepackage{multirow}
+\usepackage[colorlinks, linkcolor = purple, citecolor = purple]{hyperref}
+\usepackage{upgreek}\usepackage[left=2cm,right=2cm,top=2cm,bottom=3cm,bindingoffset=0cm]{geometry}
+\usepackage{tikz}
+\usepackage{graphicx}
+\graphicspath{ {./pictures/} }
+\usepackage{subfig}
+\usepackage{titletoc}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{xcolor}
+\usepackage{wrapfig}
+\usepackage{todonotes}
+
+\newcommand\myworries[1]{\colorbox{red!30}{TODO #1}}
+\newcommand\attention[1]{\colorbox{cyan!30}{#1}}
+
+\title{Sem9Synopsis}
+\begin{document}
+
+\author{Александр Мишин, Б01-008а}
+\date{}
+\maketitle
+
+\section*{Метод трёхдиагональной прогонки}
+\[|b_k| \leq |a_k| + |c_k|\]
+Хоть одно строгое для какого-то К, значит м.н. устойчив.
+\subsection* {Прямой ход}
+\[b_1 x_1 + c_1 x_2 = f_1\]
+\[a_k x_{k-1} + b_k x_k + c_k x_{k+1} = f_k\]
+\[a_n x_{n-1} + b_n x_n = f_n\]
+\subsection*{Прогоночные коэффициенты}
+$p_1 = \frac{c_1}{b_1}$, $r_1 = \frac{f_1}{b_1}$, $p_k = \frac{c_k}{b_k - a_k p_{k-1}}$, $r_k = \frac{f_k - a_k r_{k-1}}{b_k - a_k p_{k-1}}$
+\[x_n = r_n = \frac{f_n - a_n r_{n-1} }{b_n - a_n p_{n-1}}\]
+
+Рассмотрим полином
+\[P_n = \sum_{k=0}^n f_k L_k(x)\]
+\[P_n (x, f + \delta f) = P_n(x, f) + P_k(x + \updelta f) \]
+\[||P_n (x, \updelta f)||_1 = ||\updelta f(x)||_1 \cdot ||\sum_{k=0}^n L_k(x)||_1 = L_n(x)\]
+
+Здесь $L_k$ - коэфф. функции Лебега. $L_k$ будут зависить от интерполяции. Для равномерной сетки Ньютон (Лагранж): $L_n \sim 2^n$
+
+Сплайн интерполяции:
+
+Если $f \in C_{k+1} [a; b], k \in [0; 3]$:
+\[\max_{[x_i, x_{i+1}]} | f^{(m)}(x) - S_3^{(m)}(x)| \leq \ch max |f ^ {k + 1 - m}(x)|\]
+
+Если $f \in C_4$
+\[|f(x) - S_3(x)| \leq \ch M_4\]
+\[|f'(x) - S_3(x)| \leq \ch M_4\]
+
+\section*{Равномерное приближение}
+$$\max_{x \in [a,b]} | f(x) - P_n^0(x)|  = inf \max_{x \in [a,b]} |f(x)-P_n(x)|$$
+Элементы наилучшего равномерного приближения. 
+
+\subsection*{Многочлены Чебышева}
+\[T_n(x) = \cos{n \arccos{x}}\]
+
+Приблизительные значения: $T_0 = 1$, $T_1 = x$, $T_{n+1} = 2x T_n - T_{n-1}$
+Многочлен Чебышева - наилучшее приближение.\\
+Среди всех алгебраических многочленов $\overline{P_n}(x)$, многочлен $\overline{T}(x)$ на отрезке [-1; 1] наименее отклоняется от 0. Или выполнено следующее
+\[\max_{x \in [-1; 1]} {\overline{T_n}(x)} = inf \max{x \in [-1; 1]} |\overline{P_n}(x)| = 2 ^ {1-n}\]
+
+\subsection*{Пример}
+\[P(x) = x ^ 2 + 2x + 1\]
+\[f(x) = ax + b\]
+f(x) - налучшим равномерным приближением?\\
+
+$[-2; 4] \longrightarrow [-1; 1]$
+\[x = \frac{b-a}{2}y + \frac{b+a}{2}\]
+\[x = 3y\]
+\[P(x) - f(x) = R(x)\]
+\[P(y) - f(y) = R(y)\]
+
+\[\overline{R}(y) = \overline{T}(y)\]
+А отсюда находим a, b.
+
+\[P(x) - f(x) = x^2 + 2x + 1 -ax - b = (3y+1)^2 + (3y+1)(2-a) + 1 -b = \]
+\[= 9y^2 + y (12 - 3a) + 4 - a - b = R(y)\]
+
+\[\overline{R}(y) = \frac{R(y)}{9} = \overline{T}_2(y) = y^2 - \frac{1}{2}\]
+
+
+Значит, a = 4, b = 4.5, f(x) = 4x + 4.5
+
+\section*{Нули полинома Чебышева}
+
+\[T_n(x), x \in [-1; 1]\]
+\[x_k = \cos{\frac{(2k+1)\pi}{2n}}\]
+
+Как избежать использование сплайна?) Можно просто узлы $x_k$ внедрить в сетку на [a; b].\\
+Напомню, исходная сетка [a; b]: $x_k = k \cdot h$, $k_k - x_{k-1} = h$\\
+
+Узлы Чебышева:
+\[x_{k+1} = \frac{a+b}{2} + \frac{b-a}{2}\cos{\frac{(2k+1)\pi}{2n}}\]
+
+Интерполяция по узлам Чебышева:
+
+\[L_n \leq 8 + \frac{4}{91} \ln{n + 1}\]
+
+C ростом числа n, эта интерполяция более устойчива.
+
+\section*{Среднеквадратичное приближение}
+\[P_m(x) = \sum_{k=0}^m a_k \varphi_k(x)\]
+Здесь $\varphi_0(x), ..., \varphi_n(x) $ - ЛНЗ.\\ 
+Пусть заданы значения для f в некоторых точках.
+
+\[S(a_0, a_1, ..., a_n) = \sum_{k=0}^n (P_m(x_k)-f(x_0))\]
+Здесь $S \longrightarrow minimum$
+
+\subsection*{Необходимое условие экстремума}
+\[grad S(a_0, ..., a_n) = 0 \Leftrightarrow B \overrightarrow{a} = \overrightarrow{c}\]
+
+$$B = [(\varphi_k, \varphi_j)]$$
+$$\overrightarrow{c} = (f_0, ..., f_m)$$
+\[f_k = \sum_{i=0}^n f(x_i) \varphi_k(x_i)\]
+
+B - симметричная, положительно определённая матрица. Если бы мы сделали всё то же самое для непрерывной функции, то знак суммы меняется на интеграл \int.
+
+Для алгебраической интерполяции:
+$\varphi_0 = 1$, $\varphi_1 = x$, $\varphi_m = x ^ m$
+\[(\varphi_k, \varphi_j) = \sum_{i = 0}^n x_i^{k+j}\]
+\[f_k = \sum_{i=0}^n y_i x_j^k\]
+\end{document}
