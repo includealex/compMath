@@ -1,0 +1,144 @@
+\documentclass[a4paper,12pt]{article} 
+\usepackage[T2A]{fontenc}			
+\usepackage[utf8]{inputenc}			
+\usepackage[english,russian]{babel}	
+\usepackage{amsmath,amsfonts,amssymb,amsthm,mathrsfs,mathtools} 
+\usepackage{cancel}
+\usepackage{hhline}
+\usepackage{multirow}
+\usepackage[colorlinks, linkcolor = purple, citecolor = purple]{hyperref}
+\usepackage{upgreek}\usepackage[left=2cm,right=2cm,top=2cm,bottom=3cm,bindingoffset=0cm]{geometry}
+\usepackage{tikz}
+\usepackage{graphicx}
+\graphicspath{ {./pictures/} }
+\usepackage{subfig}
+\usepackage{titletoc}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{xcolor}
+\usepackage{wrapfig}
+\usepackage{todonotes}
+
+\newcommand\myworries[1]{\colorbox{red!30}{TODO #1}}
+\newcommand\attention[1]{\colorbox{cyan!30}{#1}}
+
+\title{Sem11Synopsis}
+\begin{document}
+
+\author{Александр Мишин, Б01-008а}
+\date{}
+\maketitle\
+
+\section*{Численное интегрирование}
+
+\subsection*{Пример 1}
+
+\[erf x = \frac{2}{\sqrt{\pi}} e^{-t^2} dt\]
+
+Найти $\int$ ср. прямоуголь.
+\[f(t) = \frac{2}{\sqrt{\pi}}e^{-t^2}\]
+\[f'(t) = \frac{-4t}{\sqrt{\pi}}e^{-t^2}\]
+\[f''(t) = \frac{2 \cdot (-2 + 4t^2)}{\sqrt{\pi}}e^{-t^2}\]
+\[f'''(t) = \frac{2 \cdot (12t - 8t^3)}{\sqrt{\pi}}e^{-t^2}\]
+\[f''(\sqrt{\frac{3}{2}}) < 2\]
+\[f''(\theta) = \frac{4}{\sqrt{\pi}}\]
+\[|R(erf \text{ 3})| < 1e-4\]
+\[|R(f)| \leq \frac{M_2 \cdot (b-a) \cdot h^2}{24} = \frac{2.5 \cdot 3 \cdot h^2}{24} < 10^{-4}\]
+\[M_2 = \max_[0;3] |f''| < 2.5\]
+\[n = \frac{b-a}{h} = \frac{3}{1.6 \cdot 10 ^ {-2}} = 167\]
+Значит, получим $h \leq 1.8 \cdot 10^{-2}$
+
+\section*{Квадратурные формулы Гаусса}
+
+\[\int_a^b f(x) dx = \sum_{i=0}^n c_i f(x_i)\]
+\[\int_a^b x^m dx = \sum_{i=0}^n c_i x^m\]
+
+\begin{cases}
+c_1 + c_2 + ... + c_n = d_1\\
+c_1x_1 + c_2x_2 + ... + c_2x_n = d_2\\
+...\\
+c_1x_1^n + ... c_n x_n^n = d_n\\
+\end{cases}
+
+\[P_n(x) = \frac{1}{2^n \cdot n!} \frac{d^n}{dx^n} (x^2 - 1)^n\]
+\[P_0 = 1\]
+\[P_1 = x\]
+\[P_2 = \frac{3}{2}x^2 - \frac{1}{2}\]
+\[P_3 = \frac{5}{2}x^3 - \frac{3}{2}x\]
+
+
+Для $P_3$:\\
+\begin{cases}
+c_1 + c_2 + c_3 = \int_{-1}^1 dx\\
+c_1 \sqrt{\frac{3}{5}} + c_2 \cdot 0 + c_3 \sqrt{\frac{3}{5}} = \int_{-1}^1 x dx\\
+c_1 {\frac{3}{5}} + c_2 \cdot 0 + c_3 {\frac{3}{5}} = \int_{-1}^1 x^2 dx\\
+\end{cases}
+\xrightarrow{}
+\begin{cases}
+c_1 = c_3 = \frac{5}{9}\\
+c_2 = \frac{8}{9}\\
+x_2 = 0\\
+x_3 = -x_1 = \frac{3}{5}\\
+\end{cases}
+
+Оказалось, что для подсчёта интеграла $\int_{-1}^1 f(x)dx$ мы можем взять формулу
+\[\int_{-1}^1 f(x)dx \approx \frac{5}{9} f(-\sqrt{\frac{3}{5}}) + \frac{8}{9} f(0) + \frac{5}{9} f(\sqrt{\frac{3}{5}}) + \delta_3\]
+
+\[\delta_n = M_{2n} \frac{2^{n+1}}{2n + 1} \cdot \frac{(n!)^4}{((2n)!)^3}\]
+\[M_{2n} = \max_{x \in [-1; 1]} |f^{2n}|\]
+
+\subsection*{Пример 1}
+Надо посчитать
+\[\int_0^{-1} e^{-x^2} dx\]
+
+Делаем замену 
+\[x = \frac{a + b}{2} + \frac{b-a}{2}t = \frac{1}{2} + \frac{1}{2}t\]
+\[\int_0^{-1} e^{-x^2} dx = \frac{1}{2} \cdot (\int_{-1}^1 e^{-(\frac{1}{2} + \frac{1}{2}t)^2} dt) = \frac{1}{2} \cdot (e^{-(\frac{1}{2} - \frac{1}{2} \cdot \frac{1}{\sqrt{3}})^2} + e^{-(\frac{1}{2} + \frac{1}{2} \cdot \frac{1}{2\sqrt{3}})^2}) \approx 0.7465\]
+
+\subsection*{Пример 2}
+
+\[\int_{-1}^1 \frac{x}{\sqrt{3}} arctg \frac{x}{\sqrt{3}}dx 
+\approx f(-\frac{1}{\sqrt{3}}) + f(\frac{1}{\sqrt{3}}) \approx 0.209\]
+
+
+\subsection*{Оптимизация}
+\[\int_{-1}^1 \rho(x)f(x)dx\]
+\[\rho(x) = \frac{1}{\sqrt{1 - x^2}}\]
+
+\begin{cases}
+A_1 + A_2 = \int_{-1}^1 \frac{1}{\sqrt{1 - x^2}} dx \\
+A_1x_1 + A_2x_2 = \int_{-1}^1 \frac{x}{\sqrt{1 - x^2}} dx \\
+A_1x_1^2+A_2x_2^2=\int_{-1}^1 \frac{\rho(x) x^2}{\sqrt{1 - x^2}} dx \\
+A_1x_1^2+A_2x_2^2=\int_{-1}^1 \frac{\rho(x) x^3}{\sqrt{1 - x^2}} dx \\
+\end{cases}
+\xrightarrow{}
+\begin{cases}
+A_1 = A_2 = \frac{\pi}{2}\\
+x_1 = -\frac{1}{\sqrt{2}}\\
+x_2 = \frac{1}{\sqrt{2}}\\
+\end{cases}\\
+
+\subsection*{Пример 3}
+
+\[\int_0^\infty f(x) dx = \int_0^\infty e^{-x} [e^x f(x)] dx = \sum_{k=1}^0 A_k e^{x_k} f(x_k)\]
+$A_k$ - квадратура Лагера.\\
+
+\[I = \int_0^\infty e^{-x} f(x) dx\]
+\begin{cases}
+A_1 = \frac{\sqrt{2} + 1}{2\sqrt{2}}\\
+A_2 = \frac{\sqrt{2} - 1}{2\sqrt{2}}\\
+x_1 = 2 - \sqrt{2}\\
+x_2 = 2 + \sqrt{2}\\
+\end{cases}\\
+
+\[I = \frac{\sqrt{2} + 1}{2\sqrt{2}} f( 2 - \sqrt{2}) + \frac{\sqrt{2} - 1}{2\sqrt{2}} f(2 + \sqrt{2})\]
+
+\subsection*{Пример}
+
+\[\int_0^1 \frac{1 + x^3}{1 + x^5}dx = \frac{1}{2} \int_{-1}^1 \frac{1 + (\frac{1}{2} + \frac{1}{2}t)^3}{1 + (\frac{1}{2} + \frac{1}{2}t)^5}dt = \frac{1}{2} (f(-\frac{1}{\sqrt{3}}) + f(\frac{1}{\sqrt{3}}) = \]
+
+\subsection*{Квадратура Эрмита}
+\[\int_{-\infty}^{+\infty} f(x) dx = \int_{-\infty}^{+\infty} e^{-x^2} [e^{x^2} f(x)] dx = \sum_{k=1}^n A_k e^{x_k^2} f(x_k)\]
+
+
+\end{document}
