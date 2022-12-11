@@ -1,0 +1,131 @@
+\documentclass[a4paper,12pt]{article} 
+\usepackage[T2A]{fontenc}			
+\usepackage[utf8]{inputenc}			
+\usepackage[english,russian]{babel}	
+\usepackage{amsmath,amsfonts,amssymb,amsthm,mathrsfs,mathtools} 
+\usepackage{cancel}
+\usepackage{hhline}
+\usepackage{multirow}
+\usepackage[colorlinks, linkcolor = purple, citecolor = purple]{hyperref}
+\usepackage{upgreek}\usepackage[left=2cm,right=2cm,top=2cm,bottom=3cm,bindingoffset=0cm]{geometry}
+\usepackage{tikz}
+\usepackage{graphicx}
+\graphicspath{ {./pictures/} }
+\usepackage{subfig}
+\usepackage{titletoc}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{xcolor}
+\usepackage{wrapfig}
+\usepackage{todonotes}
+
+\newcommand\myworries[1]{\colorbox{red!30}{TODO #1}}
+\newcommand\attention[1]{\colorbox{cyan!30}{#1}}
+
+\title{Sem13Synopsis}
+\begin{document}
+
+\author{Александр Мишин, Б01-008а}
+\date{}
+\maketitle\
+
+\section*{ОДУ}
+
+Исходная диффференциальная задача:
+\[\frac{du}{dt} = f(t, u)\]
+
+Ставится задача Коши, t > 0, u(0) = 0. Можно решать 
+\[\frac{du}{dx} = f(x, u)\]
+
+\[\frac{d^m u}{dt^m} = g(t, u, \frac{du}{dt}, ..., \frac{d^{m-1} u}{d t^{m-1}})\]
+
+Делаем так: $u_1 = u, u_2 = \frac{du_1}{dt}, u_3 = \frac{du_2}{dt}$
+\\Тогда 
+\[\frac{du^m}{dt} = g(t, u_1, u_2, ..., u_m\]
+
+Исходную дифференциальную задачу ещё записывают так:
+\[L(u) = F\]
+Здесь\\
+L(u) = \begin{cases}
+du/dt - f(t, u), t > 0\\
+u(0), t = 0
+\end{cases}\hskip{;}\hskip{}
+F = \begin{cases}
+    0, t > 0\\
+    $u_0$, t = 0
+\end{cases}\\
+
+\section*{Разностная задача}
+Разностная задача должна сходиться по сетке 
+\[L_\tau (y) = F_\tau\]
+Здесь y - сеточное решение(сеточная функция).\\
+$U^\tau$ -  проекция точного решения искомой задачи на сетку.
+
+\subsection*{Сходимость разностной задачи к дифференциальной}
+\[||y - U^\tau|| \longmapsto 0\]
+при $\tau \longmapsto 0$
+
+Пусть сетка [0, 1/3, 2/3]. Тогда проекция нашего решения $u = \sin{t}$ на сетку:\\
+\[[u]_0 = 0\]
+\[[u]_1 = \sin{1/3} = \sin{\tau}\]
+\[[u]_2 = \sin{2/3} = \sin{2\tau}\]
+
+\subsection*{Сходимость 2}
+Ребус
+\[A^q + Y = C^q\]
+Здесь С - сходимость, А - аппроксимация, Y - устойчивость.\\
+Разностная задача А исходящую на её решении, если невязка $||r_\tau|| \longmapsto 0$, $\tau \longmapsto 0$, где $r_\tau = L_\tau(U^\tau) - F_\tau$. Если оказалось, что $||r_\tau \leq C_1 \tau ^ q||$, то q - порядок аппроксимации А.\\
+Задача разностная устойчива, если две близкие возмущенные задачи одновременно однозначно разрешимы и 
+\[L_\tau(y_1) - F_\tau = \xi\]
+\[L_\tau(y_2) - F_\tau = \eta\]
+Если $||y_1 - y_2|| \leq C_2 (||\xi_\tau|| + ||\eta_\tau||)$
+
+\section*{Классификация}
+\[\frac{du}{dt} = f(t, u), t > 0, u(0) = u_0\]
+Используем расчётный метод
+\[u_{n+1} = u_n + \tau f(t_n, u_n)\]
+Это - \attention{явный метод Эйлера первого порядка}.\\\\
+\attention{Неявный метод Эйлера первого порядка} :
+\[u_{n+1} = u_n + \tau f(t_{n+1}, u_{n+1})\]
+
+\subsection*{Особенности явных и неявных методов по устойчивости}
+Все явные методы условно устойчивые!!!\\
+Условие устойчивости обычно формулируется на шаг интегрирования.
+\[\tau \leq M\]
+Н.Я. в большинстве случаев безусловно устойчивые или имеют более широкую область устойчивости, чем аналогичные явные методы.
+
+\section*{Пример 1}
+С каким порядком на сетке $D_n = {x_l = lh, l = \overline{0, L}, h = \frac{1}{L}}$ 
+\[L_\tau(u) = F_\tau\]
+\begin{cases}
+\frac{y_{l+1} - 2y_2 + y_{l+1}}{h^2} + 6 \frac{y_{l+1} - y_{l-1}}{2h} + 5y_2 = 0, l = \overline{1, L-1}\\
+y_0 = 0\\
+y_1 = 2h - 6h^2\\
+\frac{d^2 y}{d x^2} + 6 \frac{dy}{dx} + 3y = 0\\
+y(0) = 0\\
+y'_x(0) = 2\\
+\end{cases}\\
+
+Вешаем [].\\
+\begin{cases}
+\frac{[y]_{l+1} - 2[y]_2 + [y]_{l+1}}{h^2} + 6 \frac{[y]_{l+1} - [y]_{l-1}}{2h} + 5[y]_2 - 0, l = \overline{1, L-1}\\
+[y]_0 = 0\\
+[y]_1 = 2h - 6h^2\\
+\end{cases}\\
+
+Ряд Тейлора:\\
+\[[y]_{L \pm 1} = [y]_L \pm h [y'_x]_L + \frac{h^2}{2}[y''_x]_L \pm \frac{h^3}{6}[y'''_x]_L +
+\frac{h^4}{24}[y''''_x]_L \pm ...\]
+
+Главные члены погрешности:\\
+\[[y''_{xx}]_L + \frac{h^2}{12} [y^{(4)}] + 6\cdot ([y'_x] + \frac{h^2}{6}[y''']) + 5[y]_L = \frac{h^2}{12}[y'''']_L + h^2 [y''']\]
+
+\[[y]_1 = [y]_0 + h[y']_0 + \frac{h^2}{2} [y'']_0 + \frac{h^3}{6}[y''']_0 + \frac{h^4}{24}[y'''']_0\]
+
+\[[y]_0 + h[y']_0 + \frac{h^2}{2} [y'']_0 + \frac{h^3}{6}[y''']_0 + \frac{h^4}{24}[y'''']_0 - 2h - 6h^2\]
+\[0 + h[y']_0 + \frac{h^2}{2} [y'']_0 + \frac{h^3}{6}[y''']_0 + \frac{h^4}{24}[y'''']_0 - 2h - 6h^2\]
+\[2 + \frac{h^2}{2} [y'']_0 + \frac{h^3}{6}[y''']_0 + \frac{h^4}{24}[y'''']_0 - 2h - 6h^2\]
+\[2 + (-12) + \frac{h^3}{6}[y''']_0 + \frac{h^4}{24}[y'''']_0 - 2h - 6h^2\]
+Значит, невязка $\leq C_1 h^2$. Значит, итоговый порядок задачи второй. Значит, поставленная задача аппроксимирует исходную задачу с порядком 2.
+
+\end{document}
