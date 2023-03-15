@@ -6,3 +6,4 @@
 *.aux
 *.git
 *.vscode/
+__pycache__
