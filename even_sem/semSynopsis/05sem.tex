@@ -1,0 +1,106 @@
+\documentclass[a4paper,12pt]{article} 
+\usepackage[T2A]{fontenc}			
+\usepackage[utf8]{inputenc}			
+\usepackage[english,russian]{babel}	
+\usepackage{amsmath,amsfonts,amssymb,amsthm,mathrsfs,mathtools} 
+\usepackage{cancel}
+\usepackage{hhline}
+\usepackage{multirow}
+\usepackage[colorlinks, linkcolor = purple, citecolor = purple]{hyperref}
+\usepackage{upgreek}\usepackage[left=2cm,right=2cm,top=2cm,bottom=3cm,bindingoffset=0cm]{geometry}
+\usepackage{tikz}
+\usepackage{graphicx}
+\graphicspath{ {./pictures/} }
+\usepackage{subfig}
+\usepackage{titletoc}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{xcolor}
+\usepackage{wrapfig}
+\usepackage{todonotes}
+
+\newcommand\myworries[1]{\colorbox{red!30}{TODO #1}}
+\newcommand\attention[1]{\colorbox{cyan!30}{#1}}
+
+\title{Sem5Synopsis}
+\begin{document}
+
+\author{Александр Мишин, Б01-008а}
+\date{}
+\maketitle
+
+\section*{Пример}
+Пусть есть система \\
+
+\[y'' - \frac{1 + x}{1 + x^2}y' - \cos{x} y = \frac{1}{1 + x^2} , 0 \leq x \leq 1\]
+
+\[2 y'(0) + y(0) = 3\]
+
+\[y'_x(1) = 2\]
+
+Решение
+
+\[h^2 \sim  \frac{y_{n+1} - 2y_N + y_{n-1}} {h^2} - \frac{1 + x_n}{1 + x_n^2} \frac{y_{n+1} - y_{n-1}}{2h} - \cos{x_n y_n} = \frac{1}{1 + x_n^2}, 1 \leq n \leq L - 1\]
+
+\[h \sim 2 \frac{y_1 - y_0}{h} + y_0 = 3, n = 0\]
+\[h \sim \frac{y_L - y_{L-1}}{h} = 2, n = L\]
+
+\[[y_1] = [y]_0 + h [y']_0 + \frac{h^2}{2} [y"]_0\]
+\[y = \sin{x}\]
+\[[y']_0 = \frac{3 - [y]_0}{2}\]
+\[[y"]_0 = [y']_0 + \cos{0} [y]_0 + 1\]
+
+Опускаем квадратные скобки, понимая под ними то же самое. (Формализм нам не интересен)
+
+\[y_1 = y_0 + h\frac{3 - y_0}{2} + \frac{h^2}{2} (\frac{3 - y_0}{2} + y_0 + 1), n = 0\]
+
+Итого
+
+\[y_1 = (1 - \frac{1}{2}h + \frac{1}{4}h^2) y" + \frac{5}{4}h^2 + \frac{3}{2}h, n = 0\]
+
+Для правого граничного условия:
+
+\[y_{L-1} = y_L - 2h + \frac{h^2}{2} (\frac{5}{2} + \cos{1} + y_L), n = L\]
+
+
+Но что будет, если мы будем использовать разностную задачу, а не Тейлора?\\
+
+Со вторым порядком точности:\\
+
+\[y'_0 = \frac{y_1 - y_{-1}}{2h}\]
+
+Расписываем разностное уравнение относительно нулевой точки:\\
+
+\[\frac{y_1 - 2y_0 + y_{-1}}{h^2} - \frac{1 + x_0}{1 + x_0^2} \frac{y_1 - y_{-1}}{h} - \cos{x_0}y_0 = \frac{1}{1 + x_0^2}\]
+
+\[2 \frac{y_1 - y_{-1}}{2h} + y_0 = 3\]
+
+Что такое $y_{-1}$ это \attention{фиктивный узел}. Ну и сам по себе, это - метод фиктивного узла.
+
+\section*{Продолжение}
+
+\[a_n y_{n-1} + b_n y_n + c_n y_{n-1} = d_n\]
+\[a_L y_{L-1} + b_L y_L = d_L\]
+\[y_0 = \frac{-c_0}{b_0}y_1 + \frac{d_0}{b_0}\]
+
+Переобозначим, теперь\\
+\[y_0 = \alpha_1 + \beta_1\]
+
+\[a_1 y_0 + b_1 y_1 + c_1 y_2 = d_1\]
+\[(-\alpha_1 y_1 + \beta_1) + b_1 y_1 + c_1 y_2 = d_1\]
+\[y_1 = \frac{-c_1}{b_1 - a \alpha_1} y_2 + \frac{d_1 - a_1 \beta_1}{b_1 - a \alpha_1} = \alpha_2 + \beta_2\]
+
+\[y_1 = -\alpha_2 y_2 + \beta_2\]
+
+\[y_i = -\alpha_{i+1} y_{i+1} + \beta_{i+1}\]
+\[\alpha_{i+1} = \frac{c_i}{b_i - a_i \alpha_i}\]
+\[\beta_{i+1} = \frac{d_1 - a_i \beta_i}{b_i - a_i \alpha_i}\]
+
+\[y_{L-1} = -\alpha_L y_L + \beta_L\]
+\[y_{L-1} + b_L y_L = d_L\]
+\[a_L (-\alpha_L y_L + \beta_2) + \beta_L y_L = d_L\]
+\[y_L = \frac{d_L - a_L \beta_L}{b_L - a_L \alpha_L} = \beta_{L+1}\]
+На этом метод прогонки заканчивается.
+
+\end{document}
+

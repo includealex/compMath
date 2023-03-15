@@ -1,0 +1,139 @@
+\documentclass[a4paper,12pt]{article} 
+\usepackage[T2A]{fontenc}			
+\usepackage[utf8]{inputenc}			
+\usepackage[english,russian]{babel}	
+\usepackage{amsmath,amsfonts,amssymb,amsthm,mathrsfs,mathtools} 
+\usepackage{cancel}
+\usepackage{hhline}
+\usepackage{multirow}
+\usepackage[colorlinks, linkcolor = purple, citecolor = purple]{hyperref}
+\usepackage{upgreek}\usepackage[left=2cm,right=2cm,top=2cm,bottom=3cm,bindingoffset=0cm]{geometry}
+\usepackage{tikz}
+\usepackage{graphicx}
+\graphicspath{ {./pictures/} }
+\usepackage{subfig}
+\usepackage{titletoc}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{xcolor}
+\usepackage{wrapfig}
+\usepackage{todonotes}
+
+\newcommand\myworries[1]{\colorbox{red!30}{TODO #1}}
+\newcommand\attention[1]{\colorbox{cyan!30}{#1}}
+
+\title{Sem2Synopsis}
+\begin{document}
+
+\author{Александр Мишин, Б01-008а}
+\date{}
+\maketitle\
+
+\section*{Вайбы прошлого семинара}
+\[\Delta_{L+1} = R(z) \Delta_L\]
+\[R(z) = 1 + z\]
+\[|R(z)| < 1\]
+\[Z = Y h \]
+\[z = \lambda_i h\]
+Условие устойчивости:
+\[|R(\lambda_i, h) | < 1\]
+Следовательно,
+\[h < const\]
+
+\section*{Уравнение Далквиста}
+
+\[\frac{du}{dt} = \lambda u = f(t, u) = f(u)\]
+Смотрим на $\lambda$ и понимаем, решение у нас затухающее($\lambda < 0$) или возрастающее.
+\[u_{L+1} = u_1 + h k_1\]
+\[k_1 = f(t, u_1) = f(u_1)\]
+\[u_{L+1} = u_L + h \lambda u_2\]
+\[u_{L+1} = (1 + \lambda h) u_2\]
+Как заместим, устойчивость это $(1 + \lambda h)$.
+
+\subsection*{Пример}
+\begin{bmatrix}
+       1/2 & 0 & 1/2\\[0.3em]
+        & 1 & \\[0.3em]
+\end{bmatrix}\\
+Какой здесь порядок метода? Второй (смотреть прошлый семинар, как там p определяется). Метод одностадийный, но порядок второй..
+\\
+Как найти функцию устойчивости?
+\[u_{L+1} = u_L + h k_1\]
+\[k_1 = f(t_L + \frac{1}{2} h, u_L + h \cdot \frac{1}{2}k_1)\]
+
+Примениим к уравнению Далквиста. Тогда
+\[k_1 = \lambda \cdot (u + h \cdot \frac{1}{2} k_1)\]
+\[k_1 = \frac{\lambda u_2}{1 - \frac{1}{2} \lambda h}\]
+\[\Rightarrow u_{L+1} = u_L + h \frac{\lambda u_2}{1 - \frac{1}{2} \lambda h} = \frac{1 + \frac{1}{2}\lambda h}{1 - \frac{1}{2} \lambda h} \cdot u_L\]
+\[|R(z)| = |\frac{1 + z/2}{1 - z/2}| < 1\]
+Здесь $z = x + iy$
+Тогда 
+\[\frac{(1 + x/2)^2 + y^2 / 4}{(1 - x/2)^2 + y^2 / 4} \leq 1\]
+\[\Rightarrow 2x \leq 0\]
+Значит, устойчивой будет вся левая комплексная плоскость.
+
+\subsection*{Неявный метод Эйлера}
+\[u_{L+1} = u_L + h \cdot f(x_{L+1}, y_{L+1})\]
+\[k_1 = \frac{y_{L+1} - y_L}{h}\]
+\[k_1 = f(x_L + h, y_L + h k_1)\]
+Применяем его к уравнению Далквиста. Тогда
+\[k_1 = \lambda (y_L + hk_1)\]
+\[k_1 = \frac{y_L}{1 - \lambda h}\]
+\[u_L + h k_1 = y_L + h \frac{\lambda y_L}{1 - \lambda h} = \frac{1}{1 - \lambda h} y_L\]
+\[R(z) = \frac{1}{1 - z}\]
+\[|R(z)| \leq 1\]
+
+\section*{Немного определений}
+\attention{А-устойчивость}:\\
+Метод, имеющий область устойчивости $|R(z)| < 1 \supset \{z: Rez \leq 0\}$ называются А-устойчивыми.\\
+
+\attention{А-$\alpha$ устойчивость}:\\
+$\alpha$ - параметр угла раствора, где выполняется условие $Re z \leq 0$.\\
+
+\attention{L-устойчивость}:\\
+Метод называется L-устойчивым, если он А-устойчив и выполнено условие, что
+\[\lim_{z \xrightarrow{} \infty} R(z) = 0\]
+
+\section*{Функции устойчивости}
+Для явных методов, у которых s = p.
+\[R(z) = 1 + z + \frac{z^2}{2!} + ... + \frac{z^p}{p!}\]
+Неявные методы:
+\[R(z) = 1 + z b^T (E-zA)^{-1}\]
+(в старых обозначениях таблицы Бутчера).\\
+
+Значит, в большинстве случаев,\\
+\[R(z) = \frac{P(z)}{Q(z)}\]
+(полиномы степени не выше s). Удобно использовать теорему:\\
+\attention{Теорема}\\
+Метод Рунге-Кутты с $R(z) = 1 + z b^T (E-zA)^{-1}$ A-устойчив $\Leftrightarrow$
+$|R(iy)| \leq 1, \forall y \in R$ и R(z) - аналитиическая функция при Re(z) < 0.
+
+\subsection*{Пример}
+\[u' = -400 u\]
+\[v' = 3 \cdot 10^{-2} u - 10v + w\]
+\[w' = -4\cdot 10^{-2} -12v - 2w\] 
+\[u(0) = 1, v(0) = -1, w(0) = 0\]
+Матрица Якоби здесь будет матрицей системы. \\
+
+J = \begin{bmatrix}
+       -400 & 0 & 0\\[0.3em]
+       $3\cdot 10^{-2}$ & $-10$ & $1$\\[0.3em]
+        $-4 \cdot 10^{-2}$& -12 & $-2$\\[0.3em]
+\end{bmatrix}\\
+Ищем собственные значения для этой матрицы. Они равны
+\[\lambda_1 = -400, \lambda_2 = -8, \lambda_3 = -4\]
+
+\attention{Жёсткая система}\\
+Cистема 
+\[\frac{d\overrightarrow{u}}{dt} = f(t, \overrightarrow{u})\]
+называется жёсткой, если для всех t, y(t) собственные значения матрицы J(t) удовлетворяют условиям
+\[\text{число жёсткости} = \frac{\max |Re \lambda_j|}{\min |Re \lambda_k|} \gg 1\]
+к $Re \lambda_j < 0$, $\max |Im \lambda_j| \ll \max |Re \lambda_k|$
+
+\[u_{L+1} = u_L + hk_1\]
+\[k_1= f(x_L + \frac{1}{2} h, y_L + \frac{1}{2} hk_1 = F(k_1)= 0\]
+Метод Ньютона используем:
+\[k_1^{s+1} = k_1^s - \frac{F(k_1^s)}{F'_{k_1}(k_1^s)}\]
+\[F'_{k_1}(k_1^s) = \frac{F_{k_1 + 1} - F_{k_1 - 1}}{2h_{k_1}}\]
+\end{document}
+

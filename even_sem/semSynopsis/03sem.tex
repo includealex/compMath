@@ -1,0 +1,145 @@
+\documentclass[a4paper,12pt]{article} 
+\usepackage[T2A]{fontenc}			
+\usepackage[utf8]{inputenc}			
+\usepackage[english,russian]{babel}	
+\usepackage{amsmath,amsfonts,amssymb,amsthm,mathrsfs,mathtools} 
+\usepackage{cancel}
+\usepackage{hhline}
+\usepackage{multirow}
+\usepackage[colorlinks, linkcolor = purple, citecolor = purple]{hyperref}
+\usepackage{upgreek}\usepackage[left=2cm,right=2cm,top=2cm,bottom=3cm,bindingoffset=0cm]{geometry}
+\usepackage{tikz}
+\usepackage{graphicx}
+\graphicspath{ {./pictures/} }
+\usepackage{subfig}
+\usepackage{titletoc}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{xcolor}
+\usepackage{wrapfig}
+\usepackage{todonotes}
+
+\newcommand\myworries[1]{\colorbox{red!30}{TODO #1}}
+\newcommand\attention[1]{\colorbox{cyan!30}{#1}}
+
+\title{Sem3Synopsis}
+\begin{document}
+
+\author{Александр Мишин, Б01-008а}
+\date{}
+\maketitle\
+
+\section*{Пример 1}
+\[k_1 = f(x_n + \frac{1}{3}h, y_n + h (\beta_{11} k_1 + \beta_{12} k_2))\]
+\[k_2 = f(x_n + h \alpha_2, y_n + h(\beta_{21} k_1 + \frac{1}{4}k_2))\]
+\[y_{n+1} = y_n + h (\frac{3}{4}k_1 + c_2 k_2)\]
+
+\begin{bmatrix}
+       $1/3$ & $\beta_{11}$ & $\beta{12}$\\[0.3em]
+       $\alpha_2$ & $\beta_{21}$ & $1/4$ \\[0.3em]
+       & $3/4$ & $c_2$ \\[0.3em]
+\end{bmatrix}\\
+
+Условие Кутты:
+\[\beta_{11} + \beta_{12} = \frac{1}{3}\]
+\[\beta_{21} + \frac{1}{4} = \alpha_2\]
+Условие на аппроксимацию:\\
+p = 1:
+\[\frac{3}{4} + c_2 = 1 \Rightarrow c_2 = \frac{1}{4}\]
+p = 2:
+\[\sum b_i c_i = \frac{1}{2} = \frac{1}{3}\cdot \frac{3}{4} + \alpha \cdot \frac{1}{4} \Rightarrow \alpha_2 = 1\]
+p = 3:
+\[\sum b_i c_i^2 = \frac{1}{3} = \frac{3}{4} (\frac{1}{3})^2 + 1^2 \cdot \frac{1}{4}\]
+\[\sum b_i a_j c_ij^2 = \frac{1}{6}\]
+\[\frac{3}{4}(\frac{1}{3} \beta_{11} + 1 \cdot \beta_{12}) + \frac{1}{4} \cdot (\frac{1}{3}\cdot\frac{3}{4} + 1 \cdot \frac{1}{4})\]
+
+
+\begin{bmatrix}
+       $1/3$ & $5/12$ & $-1/12$\\[0.3em]
+       $1$ & $3/4$ & $1/4$ \\[0.3em]
+       & $3/4$ & $1/4$ \\[0.3em]
+\end{bmatrix}
+
+Мы пришли к конкретному \attention{методу Радо} (неявный метод 3-го порядка).
+
+\section*{Пример 2}
+\[R(z) = 1 + z b^T(E - zA) ^ {-1} \overrightarrow{1}\]
+
+A = \begin{bmatrix}
+       5/12 & -1/12\\[0.3em]
+        3/4 & -1/4\\[0.3em]
+\end{bmatrix}\\
+E - zA  = \begin{bmatrix}
+       $1 - z \cdot \frac{5}{12}$ & $z\cdot 1/12$\\[0.3em]
+        $-3/4 z$ & $1 - 1/4 z$\\[0.3em]
+\end{bmatrix}\\
+$b^T$ = \begin{bmatrix}
+    3/4 & 1/4\\[0.3em]
+\end{bmatrix}
+
+Считаем R(z), учитывая, что 
+$\overrightarrow{1} = $\begin{bmatrix}
+    1 \\[0.3em]
+    1 \\[0.3em]
+\end{bmatrix}
+
+\[R(z) = \frac{2z + 6}{(z-2)^2 + 2}\]
+Это и есть функция устойчивости.\\
+Проверить на А-устойчивость и L-устойчивость - следующая задача.\\
+А-устойчивость:
+
+\[|R(z)| > 1 > \overline{C}\]
+R(z) - регулярная функция для  R(z) < 0.
+
+\[|6 + i2y|^2 \leq |6 - y^2 - i4y|^2 \]
+\[36 + 4y^2 \leq (6 - y^2)^2 + 16y^2\]
+\[\Rightarrow y^4 \geq 0\]
+$\Rightarrow$ A - устойчивость.\\
+А что по L-устойчивости:\\
+A-устойчивость + $\lim_{z \rightarrow + \infty} R(z) = 0$
+Всё выполняется $\Rightarrow$ L-устойчива.
+
+\section*{Метод Розенброка}
+\[y' = f(y) \text{ - автономный}\]
+
+Допустим, стадии будут выражаться в следующем виде:
+\[k_i = h f(y_0 + \sum_{j=1}^{i-1} a_{ij} k_j + a_{ii}k_i\]
+\[y_1 = y_0 + \sum_{i=1}^s b_i k_i\]
+
+Применяется одноразово метод Ньютона.
+\[k_i = h f(g_i) + h f'(g_i)a_{ii}k_i\]
+\[g_i = y_0 + \sum_{j=1}^{i=1} a_{ij}k_j\]
+
+\attention{Метод Розенброка}
+\[\overrightarrow{k_i} = h \overrightarrow{f} (\overrightarrow{y_0} + \sum_{j=1}^{i-1} \alpha_{ij}\overrightarrow{k_j}) + h J \sum_{j=1}^i \gamma_{ij} k_j\]
+\[\overrightarrow{y_1} = \overrightarrow{y_0} + \sum_{i=1}^s b_i \overrightarrow{k_i}\]
+
+\section*{Пример из статьи}
+(Трёхстадийный метод Розенброка).
+\[y_{n+1} = y_n + p_1 k_1 + p_2 k_2 + p_3 k_3 + ...\]
+
+\[D_n k_1 = h f(y_n)\]
+\[D_n k_2 = h f(y_n + \beta_{21}k_1)\]
+\[D_n k_3 = h f(y_n + \beta_{31}k_1 + \beta_{32}k_2)\]
+
+\section*{Линейные многошаговые методы}
+\[\alpha_k y_{L+k} + \alpha_{k-1} y_{L+k-1} + ... + \alpha_0 y_L = h (\beta_k f_{L+k} + \beta_{k-1} f_{L+k -1} + ... + \beta_0 f_L \]
+
+Многошаговый метод имееет порядок p
+\[\sum_{j=0}^k \alpha_j = 0\]
+\[\sum_{j=0}^k \alpha_j j^q = q \sum_{j=0} B_{i}j^{q-1}, q = 1, ..., p\]
+
+\section*{Пример}
+\[\alpha_2 u_{n+1} + \alpha_1 u_n + \alpha_0 u_{n-1}\]
+Здесь $\alpha_2 = 1, \alpha_1 = -7/8, \alpha_0 = -1/8, b_2 = 5/16, b_1 = 15/16, b_0 - -1/8$
+
+q = 0:
+ \[\sum \alpha_j = 0\]
+q = 1:
+\[\sum \alpha_j j^1 = 1 \cdot \sum_j=0^2 B_j j^{1-1}\]
+\[\alpha_0 \cdot 0 + \alpha_1 \cdot 1 + \alpha_2 \cdot 2 = B_0 \cdot (0)^0 + B_1 \cdot 1 + B_2 \cdot 2\]
+q = 2 - выполняется. Для q = 3 - нет.
+
+
+\end{document}
+
